@@ -1,20 +1,23 @@
 import React from 'react'
 import { reduxForm, Field } from 'redux-form'
+import { connect } from 'react-redux'
+import * as actions from '../../actions'
+import { compose } from 'redux' // after importing this > redo 'export default'
 
 class Signup extends React.Component {
-    onSubmit = (formProps) => {
-        console.log(formProps)
+    onSubmit = (formProps) => {         // formProps = { email, password }
+        this.props.signup(formProps)    // this.props.signup >> comes from connect(null, *ACTIONS*) >> now all <index.js> actions are available as props 
     }
 
     render() {
 
         const { handleSubmit } = this.props // comes from 'redux-form'
-
+        
         return (
             <form onSubmit={handleSubmit(this.onSubmit)}>
                 <fieldset>
                     <label>Email</label>
-                    <Field 
+                    <Field
                         name="email"
                         type="text"
                         component="input"
@@ -23,7 +26,7 @@ class Signup extends React.Component {
                 </fieldset>
                 <fieldset>
                     <label>Password</label>
-                    <Field 
+                    <Field
                         name="password"
                         type="password"
                         component="input"
@@ -37,5 +40,8 @@ class Signup extends React.Component {
 }
 
 
-// need to name the form ('Signup')
-export default reduxForm({ form: 'Signup' })(Signup)
+// export default reduxForm({ form: 'Signup' })(Signup)
+export default compose(
+    connect(null, actions),
+    reduxForm({ form: 'signup' })
+)(Signup)
